@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*{
+    font-family: "Outfit", sans-serif;
+}
+
+@layer utilities {
+    @keyframes water-flow {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 200% 50%;
+      }
+    }
+  
+    .water-flow-border {
+      background-image: linear-gradient(270deg, #f97316, #ffffff, #9333ea, #ffffff, #f97316);
+      background-size: 400% 400%;
+      animation: water-flow 6s linear infinite;
+    }
+  }
+
+
+  @keyframes moveStars {
+    0% {
+      transform: translateX(0) translateY(0);
+    }
+    25% {
+      transform: translateX(20px) translateY(15px);
+    }
+    50% {
+      transform: translateX(-20px) translateY(-25px);
+    }
+    75% {
+      transform: translateX(30px) translateY(10px);
+    }
+    100% {
+      transform: translateX(0) translateY(0);
+    }
+  }
+  
+  .animate-moveStars {
+    animation: moveStars 10s infinite ease-in-out;
+  }
+  
