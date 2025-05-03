@@ -25,7 +25,7 @@ const Description = () => {
           alt="AI sample"
           onClick={handleClick}
           className={`cursor-pointer rounded-lg transition-all duration-300
-            w-48 sm:w-56 md:w-64 lg:w-80 xl:w-96
+            w-48 sm:w-56 md:w-64 lg:w-80 xl:w-96 mt-8
             ${isClicked ? 'blur-0' : 'blur-sm'}`}
         />
 
