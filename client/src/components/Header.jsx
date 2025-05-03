@@ -32,7 +32,7 @@ const Header = () => {
                 Dive into a world of limitless creativity. Transform your ideas into stunning visuals in just seconds — type it, and let the magic unfold.
             </p>
 
-            <button className='sm:text-lg text-white font-semibold bg-gradient-to-tl from-orange-500 to-purple-900 w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full'>
+            <button className='sm:text-lg text-white font-semibold bg-gradient-to-tl from-orange-500 to-purple-900 w-auto mt-8 px-12 py-2.5 flex items-center gap-2 rounded-full hover:scale-105 transition-all duration-500'>
                 Generate Images
                 <GiStarsStack className='text-yellow-400 text-2xl h-6' />
             </button>

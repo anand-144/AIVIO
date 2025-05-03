@@ -2,7 +2,7 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import { BuyCredit, Home, Result } from './pages';
-import {Navbar} from './components';
+import {Footer, Navbar} from './components';
 
 const App = () => {
   return (
@@ -13,6 +13,7 @@ const App = () => {
         <Route path='/result' element={<Result />} />
         <Route path='/credit' element={<BuyCredit />} />
       </Routes>
+      <Footer />
     </div>
   );
 };
