@@ -12,12 +12,12 @@ const Steps = () => {
                 
                 <div
                 key={index}
-                className="flex items-center gap-4 p-5 px-8 bg-gradient-to-br from-white/10 to-black  rounded-xl shadow-md shadow-orange-400/65 backdrop-blur-lg cursor-pointer hover:scale-[1.03] transition-transform duration-300"
+                className="flex items-center gap-4 p-5 px-8 bg-gradient-to-br from-transparent via-slate-900 to-black  rounded-xl border-2 border-orange-500 shadow-md shadow-orange-400/65 backdrop-blur-lg cursor-pointer hover:scale-[1.03] transition-transform duration-300"
               >
-                <img src={item.icon} alt="stepsImage" width={40} />
+                <img src={item.icon} alt="stepsImage" width={40} className='md:w-20'/>
                 <div>
-                  <h2 className="text-lg font-semibold text-white">{item.title}</h2>
-                  <p className="text-sm text-gray-300">{item.description}</p>
+                  <h2 className="text-lg font-semibold text-white md:text-2xl">{item.title}</h2>
+                  <p className="text-sm text-gray-300 md:text-xl">{item.description}</p>
                 </div>
               </div>
               
