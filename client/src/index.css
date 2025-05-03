@@ -26,25 +26,4 @@
   }
 
 
-  @keyframes moveStars {
-    0% {
-      transform: translateX(0) translateY(0);
-    }
-    25% {
-      transform: translateX(20px) translateY(15px);
-    }
-    50% {
-      transform: translateX(-20px) translateY(-25px);
-    }
-    75% {
-      transform: translateX(30px) translateY(10px);
-    }
-    100% {
-      transform: translateX(0) translateY(0);
-    }
-  }
-  
-  .animate-moveStars {
-    animation: moveStars 10s infinite ease-in-out;
-  }
   
