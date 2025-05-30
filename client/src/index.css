@@ -4,43 +4,60 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-    font-family: "Outfit", sans-serif;
+* {
+  font-family: "Outfit", sans-serif;
 }
 
-@layer utilities {
-    @keyframes water-flow {
-      0% {
-        background-position: 0% 50%;
-      }
-      100% {
-        background-position: 200% 50%;
-      }
-    }
-  
-    .water-flow-border {
-      background-image: linear-gradient(270deg, #f97316, #ffffff, #9333ea, #ffffff, #f97316);
-      background-size: 400% 400%;
-      animation: water-flow 6s linear infinite;
-    }
+/* Animated border utility */
+.water-flow-border {
+  position: relative;
+  z-index: 0;
+  border-radius: 9999px;
+}
+
+.water-flow-border::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  padding: 2px;
+  border-radius: 9999px;
+  background: linear-gradient(270deg, #f97316, #ffffff, #9333ea, #ffffff, #f97316);
+  background-size: 400% 400%;
+  animation: water-flow 6s linear infinite;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+}
+
+@keyframes water-flow {
+  0% {
+    background-position: 0% 50%;
   }
-  
-/* Add this to your global CSS file (e.g., index.css or App.css) */
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  background:  rgb(59 7 100);/* Track color */
+  background: rgb(59 7 100); /* Track color */
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #ff7f50; /* Thumb color */
+  background: #ff4400; /* Thumb color */
   border-radius: 1px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff5722;
+  background: #ff3c00;
 }
-
-
