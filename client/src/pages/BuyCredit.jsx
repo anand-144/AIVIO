@@ -3,14 +3,21 @@ import { plans } from '../assets/assets'
 import { FaRegLightbulb, FaUserTie } from 'react-icons/fa'
 import { IoDiamond } from "react-icons/io5"
 import { AppContext } from '../context/AppContext'
+import { motion } from 'framer-motion'
 
 
 const BuyCredit = () => {
 
-  const {user} = useContext(AppContext)
+  const { user } = useContext(AppContext)
 
   return (
-    <div className='min-h-[80vh] text-center pt-14 mb-10'>
+    <motion.div
+      initial={{ opacity: 0.2, y: 100 }}
+      transition={{ duration: 1 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      
+      className='min-h-[80vh] text-center pt-14 mb-10'>
       <button className='bg-black border-white border-2 text-white font-semibold px-12 py-3 rounded-full shadow-lg hover:scale-105 hover:shadow-gray-500 transition-all duration-300 mb-5'>
         Our Plans
       </button>
@@ -66,7 +73,7 @@ const BuyCredit = () => {
             )
           })}
       </div>
-    </div>
+    </motion.div>
   )
 }
 

@@ -7,7 +7,12 @@ const Description = () => {
   const handleClick = () => setIsClicked(prev => !prev);
 
   return (
-    <div className="flex flex-col items-center justify-center my-12 px-4 sm:px-6 md:px-12 lg:px-24">
+    <motion.div
+    initial={{ opacity: 0.2 , y: 100}}
+    transition={{ duration: 1}}
+    whileInView={{ opacity : 1, y: 0}}
+    viewport={{ once : true}}
+    className="flex flex-col items-center justify-center my-12 px-4 sm:px-6 md:px-12 lg:px-24">
       {/* Main Heading & Subheading */}
       <div className="w-full order-1 mb-8">
         <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-center max-w-xs sm:max-w-md md:max-w-2xl lg:max-w-3xl mx-auto bg-gradient-to-r from-orange-500 via-yellow-300 to-purple-500 text-transparent bg-clip-text drop-shadow-lg tracking-tight animate-shine bg-[length:200%_auto] bg-[position:0_0]">
@@ -64,7 +69,7 @@ const Description = () => {
           </p>
         </div>
       </motion.div>
-    </div>
+    </motion.div>
   )
 }
 

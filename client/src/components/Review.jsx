@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import { assets, testimonialsData } from '../assets/assets'
 import { FaChevronLeft, FaChevronRight } from 'react-icons/fa'
 
+import { motion } from 'framer-motion'
+
 const Review = () => {
     const [startIndex, setStartIndex] = useState(0)
     const [visibleCount, setVisibleCount] = useState(3)
@@ -36,7 +38,12 @@ const Review = () => {
     const visibleTestimonials = testimonialsData.slice(startIndex, startIndex + visibleCount)
 
     return (
-        <div className='flex flex-col items-center justify-center my-20 p-6 sm:p-12'>
+        <motion.div
+            initial={{ opacity: 0.2, y: 100 }}
+            transition={{ duration: 1 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className='flex flex-col items-center justify-center my-20 p-6 sm:p-12'>
             <h1 className='text-3xl sm:text-4xl font-semibold mb-2 text-orange-500'>Homie’s Vibe Check</h1>
             <p className='text-white mb-12'>See What the Squad’s Sayin’</p>
 
@@ -85,7 +92,7 @@ const Review = () => {
                     </button>
                 )}
             </div>
-        </div>
+        </motion.div>
     )
 }
 

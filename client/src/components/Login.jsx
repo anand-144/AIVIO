@@ -6,6 +6,8 @@ import { SlSocialGoogle } from "react-icons/sl"
 import { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
 
+import { motion } from 'framer-motion'
+
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
@@ -13,25 +15,31 @@ const Login = () => {
   const [state, setState] = useState('Login')
   const [confirmPassword, setConfirmPassword] = useState('')
 
-  const {setShowLogin} = useContext(AppContext)
+  const { setShowLogin } = useContext(AppContext)
 
-  useEffect(() =>{
+  useEffect(() => {
     document.body.style.overflow = 'hidden';
 
-    return ()=> {
+    return () => {
       document.body.style.overflow = 'unset'
     }
-  },[])
+  }, [])
 
   const toggleState = () => {
     setState(prev => (prev === 'Login' ? 'Register' : 'Login'))
   }
 
   return (
-    <div className='absolute top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/50 flex justify-center items-center'>
-      <form className='relative bg-white p-10 rounded-xl text-slate-500 w-full max-w-md'>
-        <h1 className='text-center text-2xl text-neutral-700 font-medium'>{state}</h1>
-        <p className='text-md text-center'>
+    <div className='fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/50 flex justify-center items-center'>
+      <motion.form
+        initial={{ opacity: 0.2, y: 50 }}
+        transition={{ duration: 0.8 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+
+        className='relative bg-white/60 p-10 rounded-xl text-slate-900 w-full max-w-md'>
+        <h1 className='text-center text-2xl text-purple-700 font-medium'>{state}</h1>
+        <p className='text-md text-center text-white'>
           {state === 'Login' ? 'Welcome back! Please login to continue' : 'Create your account to get started'}
         </p>
 
@@ -42,7 +50,7 @@ const Login = () => {
               type="text"
               placeholder='Full Name'
               required
-              className='outline-none text-md bg-transparent w-full'
+              className='outline-none text-md bg-transparent w-full placeholder:text-black'
             />
           </div>
         )}
@@ -53,7 +61,7 @@ const Login = () => {
             type="email"
             placeholder='Email Id'
             required
-            className='outline-none text-md bg-transparent w-full'
+            className='outline-none text-md bg-transparent w-full placeholder:text-black'
           />
         </div>
 
@@ -64,7 +72,7 @@ const Login = () => {
               type={showPassword ? 'text' : 'password'}
               placeholder='Password'
               required
-              className='outline-none text-md bg-transparent w-full'
+              className='outline-none text-md bg-transparent w-full placeholder:text-black'
             />
           </div>
           <button
@@ -77,8 +85,8 @@ const Login = () => {
         </div>
 
         {state === 'Register' && (
-          <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4'>
-            <div className='flex items-center gap-2 w-full'>
+          <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4 '>
+            <div className='flex items-center gap-2 w-full '>
               <MdLockOutline className='text-xl' />
               <input
                 type={showConfirmPassword ? 'text' : 'password'}
@@ -86,7 +94,7 @@ const Login = () => {
                 required
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className='outline-none text-md bg-transparent w-full'
+                className='outline-none text-md bg-transparent w-full placeholder:text-black'
               />
             </div>
             <button
@@ -135,8 +143,8 @@ const Login = () => {
           )}
         </p>
 
-        <MdOutlineClose className='absolute top-5 right-5 cursor-pointer text-xl' onClick={()=>setShowLogin(false)}/>
-      </form>
+        <MdOutlineClose className='absolute top-5 right-5 cursor-pointer text-xl' onClick={() => setShowLogin(false)} />
+      </motion.form>
     </div>
   )
 }
