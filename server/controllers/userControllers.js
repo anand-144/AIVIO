@@ -99,16 +99,23 @@ const resetPassword = async (req, res) => {
 
 const userCredits = async (req, res) => {
   try {
-    const {userId} = req.body
+    const userId = req.userId; // ✅ userId injected from middleware
 
-    const  user  =await userModel.findById(userId)
-    res.json({success : true , credits: user.creditBalance , 
-      user:{name: user.name}
-    })
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ success: false, message: "User not found" });
+    }
+
+    res.json({
+      success: true,
+      credits: user.creditBalance,
+      user: { name: user.name }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({ success: false, message: error.message });
   }
-}
+};
 
-export {registerUser, loginUser, resetPassword};
+
+export {registerUser, loginUser, resetPassword , userCredits};
