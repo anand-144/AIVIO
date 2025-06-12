@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { RiRobot3Line } from "react-icons/ri"
 import { MdOutlineEmail, MdLockOutline, MdOutlineClose } from "react-icons/md"
 import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import { SlSocialGoogle } from "react-icons/sl"
-import { useContext } from 'react'
 import { AppContext } from '../context/AppContext'
-
+import axios from 'axios'
 import { motion } from 'framer-motion'
+
+import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -14,8 +15,67 @@ const Login = () => {
   const [rememberMe, setRememberMe] = useState(false)
   const [state, setState] = useState('Login')
   const [confirmPassword, setConfirmPassword] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
-  const { setShowLogin } = useContext(AppContext)
+  const { setShowLogin, backendUrl, setToken, setUser } = useContext(AppContext)
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault()
+
+    try {
+      if (state === 'Login') {
+        const { data } = await axios.post(`${backendUrl}/api/user/login`, { email, password })
+
+        if (data.success) {
+          setToken(data.token)
+          setUser(data.user)
+
+          if (rememberMe) {
+            localStorage.setItem('token', data.token)
+          } else {
+            sessionStorage.setItem('token', data.token)
+          }
+
+          setShowLogin(false)
+        }
+      }
+
+      // Add register or reset password handlers as needed
+    } catch (error) {
+      console.error("Login error:", error)
+    }
+  }
+
+  const handleGoogleAuth = async () => {
+    try {
+      const provider = new GoogleAuthProvider()
+      const auth = getAuth()
+      const result = await signInWithPopup(auth, provider)
+      const { email, displayName } = result.user
+
+      const { data } = await axios.post(`${backendUrl}/api/user/google-login`, {
+        name: displayName,
+        email
+      })
+
+      if (data.success) {
+        setToken(data.token)
+        setUser({ name: data.user.name })
+
+        if (rememberMe) {
+          localStorage.setItem('token', data.token)
+        } else {
+          sessionStorage.setItem('token', data.token)
+        }
+
+        setShowLogin(false)
+      }
+    } catch (error) {
+      console.error("Google login error:", error)
+    }
+  }
 
   useEffect(() => {
     document.body.style.overflow = 'hidden'
@@ -35,6 +95,7 @@ const Login = () => {
   return (
     <div className='fixed top-0 left-0 right-0 bottom-0 z-10 backdrop-blur-sm bg-black/50 flex justify-center items-center'>
       <motion.form
+        onSubmit={onSubmitHandler}
         initial={{ opacity: 0.2, y: 50 }}
         transition={{ duration: 0.8 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -56,6 +117,8 @@ const Login = () => {
               placeholder='Full Name'
               required
               className='outline-none text-md bg-transparent w-full placeholder:text-black'
+              onChange={e => setName(e.target.value)}
+              value={name}
             />
           </div>
         )}
@@ -68,6 +131,8 @@ const Login = () => {
               placeholder='Email Id'
               required
               className='outline-none text-md bg-transparent w-full placeholder:text-black'
+              onChange={e => setEmail(e.target.value)}
+              value={email}
             />
           </div>
         )}
@@ -81,6 +146,8 @@ const Login = () => {
                 placeholder='Password'
                 required
                 className='outline-none text-md bg-transparent w-full placeholder:text-black'
+                onChange={e => setPassword(e.target.value)}
+                value={password}
               />
             </div>
             <button
@@ -133,66 +200,16 @@ const Login = () => {
           </div>
         )}
 
-        {state === 'ResetPassword' && (
-          <>
-            <div className='border px-6 py-3 flex items-center gap-2 rounded-full mt-4'>
-              <MdOutlineEmail className='text-xl' />
-              <input
-                type="email"
-                placeholder='Enter your registered email'
-                required
-                className='outline-none text-md bg-transparent w-full placeholder:text-black'
-              />
-            </div>
-
-            <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4'>
-              <div className='flex items-center gap-2 w-full'>
-                <MdLockOutline className='text-xl' />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  placeholder='New Password'
-                  required
-                  className='outline-none text-md bg-transparent w-full placeholder:text-black'
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowPassword(prev => !prev)}
-                className="text-xl ml-2"
-              >
-                {showPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </button>
-            </div>
-
-            <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4 '>
-              <div className='flex items-center gap-2 w-full '>
-                <MdLockOutline className='text-xl' />
-                <input
-                  type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder='Confirm Password'
-                  required
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  className='outline-none text-md bg-transparent w-full placeholder:text-black'
-                />
-              </div>
-              <button
-                type="button"
-                onClick={() => setShowConfirmPassword(prev => !prev)}
-                className="text-xl ml-2"
-              >
-                {showConfirmPassword ? <AiOutlineEyeInvisible /> : <AiOutlineEye />}
-              </button>
-            </div>
-          </>
-        )}
-
         <button className='bg-blue-600 w-full text-white py-2 rounded-full my-4'>
           {state === 'Login' ? 'Login' : state === 'Register' ? 'Create Account' : 'Reset Password'}
         </button>
 
         {state !== 'ResetPassword' && (
-          <button className='flex items-center justify-center gap-2 bg-gradient-to-l from-[#4285f4] via-[#ea4335] to-[#59f182] w-full text-white py-2 rounded-full mt-2'>
+          <button
+            type="button"
+            onClick={handleGoogleAuth}
+            className='flex items-center justify-center gap-2 bg-gradient-to-l from-[#4285f4] via-[#ea4335] to-[#59f182] w-full text-white py-2 rounded-full mt-2'
+          >
             <SlSocialGoogle className='text-xl' />
             {state === 'Login' ? 'Google Login' : 'Google Signup'}
           </button>
