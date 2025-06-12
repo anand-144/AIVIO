@@ -5,6 +5,9 @@ import {
   signInWithPopup,
   onAuthStateChanged,
 } from "firebase/auth";
+import { toast } from "react-toastify";
+
+import axios from "axios";
 
 export const AppContext = createContext();
 
@@ -21,6 +24,20 @@ const AppContextProvider = ({ children }) => {
 
   const backendUrl = import.meta.env.VITE_BACKEND_URL
 
+  const loadCreditData = async () => {
+    try {
+      const  {data}  =  await axios.get(backendUrl + '/api/user/credits' , {headers: {token}})
+
+      if(data.success){
+        setCredit(data.credits)
+        setUser(data.user)
+      }
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
+
   // Sign in with Google
   const signInWithGoogle = async () => {
     try {
@@ -32,6 +49,12 @@ const AppContextProvider = ({ children }) => {
     }
   };
 
+  const logout = () =>{
+    localStorage.removeItem('token');
+    setToken('')
+    setUser(null)
+  }
+
   // Listen to auth state changes
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -41,6 +64,12 @@ const AppContextProvider = ({ children }) => {
 
     return () => unsubscribe();
   }, []);
+
+  useEffect(() => {
+    if(token){
+      loadCreditData()
+    }
+  }, [token])
 
   const value = {
     user,
@@ -52,7 +81,9 @@ const AppContextProvider = ({ children }) => {
     token,
     setToken,
     credit,
-    setCredit
+    setCredit,
+    loadCreditData,
+    logout
   };
 
   return (

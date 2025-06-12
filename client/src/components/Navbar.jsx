@@ -7,7 +7,7 @@ import { AppContext } from '../context/AppContext';
 
 const Navbar = () => {
 
-  const { user , setShowLogin} = useContext(AppContext)
+  const { user , setShowLogin , logout , credit} = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -24,11 +24,11 @@ const Navbar = () => {
               <MdStars className='w-6 h-6 text-orange-500' />
               <p className="text-xs sm:text-sm text-gray-600">
                 <span className="hidden sm:inline">Credit left: </span>
-                <span>10</span>
+                <span>{credit}</span>
               </p>
 
             </button>
-            <p className='text-gray-600 max-sm:hidden pl-4 text-md'>Hi ,Buddy</p>
+            <p className='text-gray-600 max-sm:hidden pl-4 text-md'>Hi ,{user.name}</p>
 
             <div className='relative group'>
               <FaRegUserCircle className='w-6 h-6 text-orange-400' />
@@ -36,7 +36,7 @@ const Navbar = () => {
               <div className='absolute hidden group-hover:block top-0 right-0 z-10 text-black rounded pt-12'>
 
                 <ul className='list-none m-0 p-2 bg-white rounded-md border text-sm'>
-                  <li className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
+                  <li onClick={logout} className='py-1 px-2 cursor-pointer pr-10'>Logout</li>
                 </ul>
 
               </div>

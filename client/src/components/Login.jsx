@@ -8,6 +8,7 @@ import axios from 'axios'
 import { motion } from 'framer-motion'
 
 import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
+import { toast } from 'react-toastify'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
@@ -31,6 +32,8 @@ const Login = () => {
         if (data.success) {
           setToken(data.token)
           setUser(data.user)
+          localStorage.setItem('token' , data.token)
+          setShowLogin(false)
 
           if (rememberMe) {
             localStorage.setItem('token', data.token)
@@ -39,6 +42,25 @@ const Login = () => {
           }
 
           setShowLogin(false)
+        }else{
+          toast.error(data.message)
+        }
+      }else{
+            const { data } = await axios.post(`${backendUrl}/api/user/register`, { name , email, password , confirmPassword })
+
+        if (data.success) {
+          setToken(data.token)
+          setUser(data.user)
+
+          if (rememberMe) {
+            localStorage.setItem('token', data.token)
+          } else {
+            sessionStorage.setItem('token', data.token)
+          }
+
+          setShowLogin(false)
+        }else{
+          toast.error(data.message)
         }
       }
 
