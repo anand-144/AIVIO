@@ -1,15 +1,12 @@
-// src/components/ProtectedRoute.jsx
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { AppContext } from '../context/AppContext';
+import LoginReminder from './LoginReminder';
 
 const ProtectedRoute = ({ children }) => {
-  const token = localStorage.getItem('token');
+  const { token } = useContext(AppContext);
+  const isAuth = token || localStorage.getItem('token') || sessionStorage.getItem('token');
 
-  if (!token) {
-    return <Navigate to="/" replace />;
-  }
-
-  return children;
+  return isAuth ? children : <LoginReminder />;
 };
 
 export default ProtectedRoute;

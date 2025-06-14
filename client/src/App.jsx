@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
-import { BuyCredit, History, Home, Result } from './pages';
+import { BuyCredit, Home, Result } from './pages';
 import {Footer, Login, Navbar} from './components';
 import { AppContext } from './context/AppContext';
 import ProtectedRoute from './components/ProtectedRoute';
@@ -30,12 +30,6 @@ const App = () => {
   <Route path='/credit' element={
     <ProtectedRoute>
       <BuyCredit />
-    </ProtectedRoute>
-  } />
-
-  <Route path="/history" element={
-    <ProtectedRoute>
-      <History />
     </ProtectedRoute>
   } />
 </Routes>

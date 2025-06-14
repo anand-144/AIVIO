@@ -6,19 +6,20 @@ import { SlSocialGoogle } from "react-icons/sl"
 import { AppContext } from '../context/AppContext'
 import axios from 'axios'
 import { motion } from 'framer-motion'
-
-import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth";
+import { signInWithPopup, GoogleAuthProvider, getAuth } from "firebase/auth"
 import { toast } from 'react-toastify'
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
-  const [rememberMe, setRememberMe] = useState(false)
   const [state, setState] = useState('Login')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [name, setName] = useState('')
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+
+  // Load from localStorage if Remember Me was checked
+  const [email, setEmail] = useState(() => localStorage.getItem("rememberedEmail") || "")
+  const [password, setPassword] = useState(() => localStorage.getItem("rememberedPassword") || "")
+  const [rememberMe, setRememberMe] = useState(() => localStorage.getItem("remembered") === "true")
 
   const { setShowLogin, backendUrl, setToken, setUser } = useContext(AppContext)
 
@@ -32,39 +33,49 @@ const Login = () => {
         if (data.success) {
           setToken(data.token)
           setUser(data.user)
-          localStorage.setItem('token' , data.token)
-          setShowLogin(false)
 
           if (rememberMe) {
-            localStorage.setItem('token', data.token)
+            localStorage.setItem("token", data.token)
+            localStorage.setItem("rememberedEmail", email)
+            localStorage.setItem("rememberedPassword", password)
+            localStorage.setItem("remembered", "true")
           } else {
-            sessionStorage.setItem('token', data.token)
+            sessionStorage.setItem("token", data.token)
+            localStorage.removeItem("rememberedEmail")
+            localStorage.removeItem("rememberedPassword")
+            localStorage.removeItem("remembered")
           }
 
           setShowLogin(false)
-        }else{
+        } else {
           toast.error(data.message)
         }
-      }else{
-            const { data } = await axios.post(`${backendUrl}/api/user/register`, { name , email, password , confirmPassword })
+      } else {
+        const { data } = await axios.post(`${backendUrl}/api/user/register`, {
+          name, email, password, confirmPassword
+        })
 
         if (data.success) {
           setToken(data.token)
           setUser(data.user)
 
           if (rememberMe) {
-            localStorage.setItem('token', data.token)
+            localStorage.setItem("token", data.token)
+            localStorage.setItem("rememberedEmail", email)
+            localStorage.setItem("rememberedPassword", password)
+            localStorage.setItem("remembered", "true")
           } else {
-            sessionStorage.setItem('token', data.token)
+            sessionStorage.setItem("token", data.token)
+            localStorage.removeItem("rememberedEmail")
+            localStorage.removeItem("rememberedPassword")
+            localStorage.removeItem("remembered")
           }
 
           setShowLogin(false)
-        }else{
+        } else {
           toast.error(data.message)
         }
       }
-
-      // Add register or reset password handlers as needed
     } catch (error) {
       console.error("Login error:", error)
     }
@@ -87,9 +98,9 @@ const Login = () => {
         setUser({ name: data.user.name })
 
         if (rememberMe) {
-          localStorage.setItem('token', data.token)
+          localStorage.setItem("token", data.token)
         } else {
-          sessionStorage.setItem('token', data.token)
+          sessionStorage.setItem("token", data.token)
         }
 
         setShowLogin(false)
@@ -183,8 +194,8 @@ const Login = () => {
         )}
 
         {state === 'Register' && (
-          <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4 '>
-            <div className='flex items-center gap-2 w-full '>
+          <div className='border px-6 py-3 flex items-center justify-between rounded-full mt-4'>
+            <div className='flex items-center gap-2 w-full'>
               <MdLockOutline className='text-xl' />
               <input
                 type={showConfirmPassword ? 'text' : 'password'}

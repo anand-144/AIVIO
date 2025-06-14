@@ -1,18 +1,28 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useContext, useState } from 'react';
 import { assets } from '../assets/assets';
 import { motion } from 'framer-motion';
+import { AppContext } from '../context/AppContext';
 
 const Result = () => {
   const [image, setImage] = useState(assets.sample_img_5);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [loading, setLoading] = useState(false);
   const [textarea, setTextarea] = useState('');
-  const navigate = useNavigate();
+
+  const { generateImage } = useContext(AppContext);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
-    // Add your image generation API logic here
+    setLoading(true);
+
+    if (textarea) {
+      const image = await generateImage(textarea);
+      if (image) {
+        setIsImageLoaded(true);
+        setImage(image);
+      }
+    }
+    setLoading(false);
   };
 
   return (
@@ -77,14 +87,6 @@ const Result = () => {
           >
             Download
           </a>
-
-          <button
-            type='button'
-            onClick={() => navigate('/history')}
-            className='bg-gradient-to-tr from-purple-800 to-orange-600 hover:opacity-80 text-white px-8 py-3 rounded-full transition-all'
-          >
-            View History
-          </button>
         </div>
       )}
     </motion.form>

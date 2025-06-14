@@ -28,7 +28,7 @@ const Navbar = () => {
               </p>
 
             </button>
-            <p className='text-gray-600 max-sm:hidden pl-4 text-md'>Hi ,{user.name}</p>
+            <p className='text-orange-500 max-sm:hidden pl-4 text-md capitalize'>Hi ,{user.name}</p>
 
             <div className='relative group'>
               <FaRegUserCircle className='w-6 h-6 text-orange-400' />
